@@ -37,7 +37,52 @@ void menu() {
     cout << "  8. Keluar" << endl;
     garis();
 }
+//fungsi tambah barang
+
+void tambahBarang() {
+    barang *baru = new barang();
+
+    cout << "\n--- TAMBAH BARANG BARU ---\n";
+    cout << "ID Barang  : "; cin >> baru->id;
+
+    // Cek duplikat ID
+    barang *cek = head;
+    while (cek != NULL) {
+        if (cek->id == baru->id) {
+            cout << "[!] ID sudah digunakan!\n";
+            delete baru;
+            return;
+        }
+        cek = cek->next;
+    }
+
+    cin.ignore();
+    cout << "Nama Barang: "; cin.getline(baru->nama, 50);
+    cout << "Stok       : "; cin >> baru->stok;
+    cout << "Harga      : "; cin >> baru->harga;
+
+    baru->next = head;
+    head = baru;
+    cout << "[+] Barang berhasil ditambahkan!\n";
+}
+
 
 int main() {
+    
+    int pilih;
+ 
+        menu();
+        cout << "  Pilih menu: ";
+        cin >> pilih;
+        cout << endl;
+
+        switch (pilih) {
+            case 1: tambahBarang();  break;
+          
+                break;
+            default:
+                cout << "[!] Menu tidak tersedia.\n";
+        }
+        cout << endl;
 
 }
