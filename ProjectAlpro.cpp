@@ -135,7 +135,7 @@ void cariBarang() {
         cin.ignore();
         cout << "Masukkan Nama: "; cin.getline(namaCari, 50);
 
-        // Konversi ke lowercase untuk perbandingan
+        // konversi ke lowercase untuk perbandingan
         char namaLower[50];
         strcpy(namaLower, namaCari);
         for (int i = 0; namaLower[i]; i++) namaLower[i] = tolower(namaLower[i]);
@@ -167,6 +167,7 @@ void cariBarang() {
         cout << "Pilihan tidak valid.\n";
     }
 }
+
 
 
 int main() {
