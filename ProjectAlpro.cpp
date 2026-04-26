@@ -37,8 +37,8 @@ void menu() {
     cout << "  8. Keluar" << endl;
     garis();
 }
-//fungsi tambah barang
 
+//fungsi tambah barang
 void tambahBarang() {
     barang *baru = new barang();
 
@@ -49,7 +49,7 @@ void tambahBarang() {
     barang *cek = head;
     while (cek != NULL) {
         if (cek->id == baru->id) {
-            cout << "[!] ID sudah digunakan!\n";
+            cout << "ID sudah digunakan!\n";
             delete baru;
             return;
         }
@@ -63,7 +63,109 @@ void tambahBarang() {
 
     baru->next = head;
     head = baru;
-    cout << "[+] Barang berhasil ditambahkan!\n";
+    cout << "Barang berhasil ditambahkan!\n";
+}
+
+//fungsi menampilkan barang
+void tampilBarang() {
+    if (head == NULL) {
+        cout << "\nGudang kosong!\n";
+        return;
+    }
+
+    cout << "\n";
+    garis();
+    cout << left
+         << setw(6)  << "ID"
+         << setw(22) << "NAMA BARANG"
+         << setw(10) << "STOK"
+         << setw(15) << "HARGA (Rp)"
+         << endl;
+    garis();
+
+    barang *temp = head;
+    while (temp != NULL) {
+        cout << left
+             << setw(6)  << temp->id
+             << setw(22) << temp->nama
+             << setw(10) << temp->stok
+             << "Rp " << fixed << setprecision(2) << temp->harga
+             << endl;
+        temp = temp->next;
+    }
+    garis();
+}
+
+//fungsi cari barang
+void cariBarang() {
+    cout << "\n--- CARI BARANG ---\n";
+    cout << "1. Cari berdasarkan ID\n";
+    cout << "2. Cari berdasarkan Nama\n";
+    cout << "Pilih: ";
+    int opsi; cin >> opsi;
+
+    if (opsi == 1) {
+        // sequential search berdasarkan ID
+        int idCari;
+        cout << "Masukkan ID: "; cin >> idCari;
+
+        barang *temp = head;
+        bool ketemu = false;
+        int posisi = 1;
+
+        while (temp != NULL) {
+            if (temp->id == idCari) {
+                ketemu = true;
+                cout << "\nBarang ditemukan di posisi node ke-" << posisi << ":\n";
+                garis();
+                cout << "ID    : " << temp->id << endl;
+                cout << "Nama  : " << temp->nama << endl;
+                cout << "Stok  : " << temp->stok << endl;
+                cout << "Harga : Rp " << fixed << setprecision(2) << temp->harga << endl;
+                garis();
+                break;
+            }
+            temp = temp->next;
+            posisi++;
+        }
+        if (!ketemu) cout << " Barang dengan ID " << idCari << " tidak ditemukan.\n";
+        } else if (opsi == 2) {
+        // linear search berdasarkan nama
+        char namaCari[50];
+        cin.ignore();
+        cout << "Masukkan Nama: "; cin.getline(namaCari, 50);
+
+        // Konversi ke lowercase untuk perbandingan
+        char namaLower[50];
+        strcpy(namaLower, namaCari);
+        for (int i = 0; namaLower[i]; i++) namaLower[i] = tolower(namaLower[i]);
+
+        barang *temp = head;
+        bool ketemu = false;
+        cout << "\nHasil pencarian \"" << namaCari << "\":\n";
+        garis();
+
+        while (temp != NULL) {
+            char tempLower[50];
+            strcpy(tempLower, temp->nama);
+            for (int i = 0; tempLower[i]; i++) tempLower[i] = tolower(tempLower[i]);
+
+            if (strstr(tempLower, namaLower) != NULL) {
+                ketemu = true;
+                cout << left
+                     << setw(6)  << temp->id
+                     << setw(22) << temp->nama
+                     << setw(10) << temp->stok
+                     << "Rp " << fixed << setprecision(2) << temp->harga
+                     << endl;
+            }
+            temp = temp->next;
+        }
+        garis();
+        if (!ketemu) cout << "Barang tidak ditemukan.\n";
+    } else {
+        cout << "Pilihan tidak valid.\n";
+    }
 }
 
 
@@ -78,10 +180,12 @@ int main() {
 
         switch (pilih) {
             case 1: tambahBarang();  break;
+            case 2: tampilBarang();  break;
+            case 3: cariBarang();    break;
           
                 break;
             default:
-                cout << "[!] Menu tidak tersedia.\n";
+                cout << "Menu tidak tersedia.\n";
         }
         cout << endl;
 
