@@ -248,7 +248,7 @@ void sortingBarang() {
             }
         } while (swapped);
 
-        cout << "[+] Data berhasil diurutkan dengan Bubble Sort!\n";
+        cout << "Data berhasil diurutkan dengan Bubble Sort!\n";
     }
 
     else if (opsi == 2) {
@@ -306,15 +306,97 @@ void sortingBarang() {
             i++;
         }
 
-        cout << "[+] Data berhasil diurutkan dengan Quick Sort!\n";
+        cout << "Data berhasil diurutkan dengan Quick Sort!\n";
     }
 
     else {
-        cout << "[!] Pilihan tidak valid.\n";
+        cout << "Pilihan tidak valid.\n";
         return;
     }
 
     tampilBarang();
+}
+
+//fungsi transaksi
+void transaksiBarang() {
+    if (head == NULL) { cout << "Gudang kosong!\n"; 
+        return; 
+    }
+
+    cout << "\n--- TRANSAKSI ---\n";
+    cout << "1. Stok Masuk" << endl;
+    cout << "2. Stok Keluar" << endl;
+    cout << "Pilih: ";
+    int opsi; cin >> opsi;
+
+    int idTarget;
+    cout << "ID Barang: "; 
+    cin >> idTarget;
+
+    barang *temp = head;
+    while (temp != NULL) {
+        if (temp->id == idTarget) {
+            int jumlah;
+            if (opsi == 1) {
+                cout << "Jumlah stok masuk : "; 
+                cin >> jumlah;
+                if (jumlah <= 0) { cout << "Jumlah tidak valid.\n"; 
+                    return; 
+                }
+                temp->stok += jumlah;
+                cout << "[+] Stok bertambah. Stok sekarang: " << temp->stok << endl;
+            } else if (opsi == 2) {
+                cout << "Jumlah stok keluar: "; 
+                cin >> jumlah;
+                if (jumlah <= 0) { cout << "Jumlah tidak valid.\n"; 
+                    return; 
+                }
+                if (jumlah > temp->stok) {
+                    cout << "Stok tidak mencukupi. Stok yang tersedia: " << temp->stok << endl;
+                    return;
+                }
+                temp->stok -= jumlah;
+                float total = jumlah * temp->harga;
+                cout << "Stok berkurang. Stok sekarang: " << temp->stok << endl;
+                cout << "Total nilai transaksi: Rp " << fixed << setprecision(2) << total << endl;
+            } else {
+                cout << "Pilihan tidak valid." << endl;
+            }
+            return;
+        }
+        temp = temp->next;
+    }
+    cout << "Barang dengan ID " << idTarget << " tidak ditemukan.\n";
+}
+
+//fungsi hapus dengan linked list
+void hapusBarang() {
+    if (head == NULL) { cout << "Gudang kosong!\n"; 
+        return; 
+    }
+
+    cout << "\n--- HAPUS BARANG ---\n";
+    int idHapus;
+    cout << "ID Barang yang dihapus: "; 
+    cin >> idHapus;
+
+    barang *current = head, *prev = NULL;
+
+    while (current != NULL) {
+        if (current->id == idHapus) {
+            if (prev == NULL)
+                head = current->next;       
+            else
+                prev->next = current->next; 
+
+            cout << "Barang \"" << current->nama << "\" berhasil dihapus.\n";
+            delete current;
+            return;
+        }
+        prev = current;
+        current = current->next;
+    }
+    cout << "Barang dengan ID " << idHapus << " tidak ditemukan.\n";
 }
 
 int main() {
@@ -327,11 +409,12 @@ int main() {
         cout << endl;
 
         switch (pilih) {
-            case 1: tambahBarang();  break;
-            case 2: tampilBarang();  break;
-            case 3: cariBarang();    break;
+            case 1: tambahBarang(); break;
+            case 2: tampilBarang(); break;
+            case 3: cariBarang(); break;
             case 4: sortingBarang(); break;
-          
+            case 5: transaksiBarang(); break;
+            case 6: hapusBarang(); break;
                 break;
             default:
                 cout << "Menu tidak tersedia.\n";
