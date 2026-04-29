@@ -399,6 +399,48 @@ void hapusBarang() {
     cout << "Barang dengan ID " << idHapus << " tidak ditemukan.\n";
 }
 
+
+//         SIMPAN KE FILE (BINARY)
+
+void simpanKeFile() {
+    FILE *file1 = fopen("data.dat", "wb");
+    if (file1 == NULL) {
+        cout << "[!] Gagal membuka file.\n";
+        return;
+    }
+
+    barang *temp = head;
+    int jumlah = 0;
+    while (temp != NULL) {
+        barang simpan = *temp;
+        simpan.next = NULL; // Jangan simpan pointer
+        fwrite(&simpan, sizeof(barang), 1, file1);
+        jumlah++;
+        temp = temp->next;
+    }
+    fclose(file1);
+    cout << "[+] " << jumlah << " data berhasil disimpan ke file \"data.dat\".\n";
+}
+
+
+//         BACA DARI FILE (BINARY)
+
+void bacaDariFile() {
+    FILE *file1 = fopen("data.dat", "rb");
+    if (file1 == NULL) return;
+
+    barang temp;
+    while (fread(&temp, sizeof(barang), 1, file1)) {
+        barang *baru = new barang();
+        *baru = temp;
+        baru->next = head;
+        head = baru;
+    }
+    fclose(file1);
+    cout << "[*] Data berhasil dimuat dari file.\n";
+}
+
+
 int main() {
     
     int pilih;
@@ -415,6 +457,8 @@ int main() {
             case 4: sortingBarang(); break;
             case 5: transaksiBarang(); break;
             case 6: hapusBarang(); break;
+            case 7: simpanKeFile();  break;
+            
                 break;
             default:
                 cout << "Menu tidak tersedia.\n";
