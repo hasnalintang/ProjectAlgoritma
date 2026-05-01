@@ -400,12 +400,12 @@ void hapusBarang() {
 }
 
 
-//         SIMPAN KE FILE (BINARY)
+//simpan ke file(binary)
 
 void simpanKeFile() {
     FILE *file1 = fopen("data.dat", "wb");
     if (file1 == NULL) {
-        cout << "[!] Gagal membuka file.\n";
+        cout << "Gagal membuka file.\n";
         return;
     }
 
@@ -413,17 +413,17 @@ void simpanKeFile() {
     int jumlah = 0;
     while (temp != NULL) {
         barang simpan = *temp;
-        simpan.next = NULL; // Jangan simpan pointer
+        simpan.next = NULL; // pointer tidak disimpan ke file
         fwrite(&simpan, sizeof(barang), 1, file1);
         jumlah++;
         temp = temp->next;
     }
     fclose(file1);
-    cout << "[+] " << jumlah << " data berhasil disimpan ke file \"data.dat\".\n";
+    cout << jumlah << " data berhasil disimpan ke file \"data.dat\".\n";
 }
 
 
-//         BACA DARI FILE (BINARY)
+//baca dari file(binary)
 
 void bacaDariFile() {
     FILE *file1 = fopen("data.dat", "rb");
@@ -437,14 +437,15 @@ void bacaDariFile() {
         head = baru;
     }
     fclose(file1);
-    cout << "[*] Data berhasil dimuat dari file.\n";
+    cout << "Data berhasil dimuat dari file.\n";
 }
 
 
 int main() {
-    
+    bacaDariFile();
+
     int pilih;
- 
+    do{
         menu();
         cout << "  Pilih menu: ";
         cin >> pilih;
@@ -458,11 +459,13 @@ int main() {
             case 5: transaksiBarang(); break;
             case 6: hapusBarang(); break;
             case 7: simpanKeFile();  break;
-            
+            case 8: simpanKeFile();
+                cout << "Data tersimpan. Sampai jumpa!\n";
                 break;
             default:
                 cout << "Menu tidak tersedia.\n";
         }
         cout << endl;
-
+    } while (pilih != 8);
+    return 0;
 }
